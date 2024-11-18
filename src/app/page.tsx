@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronDown,
   Cpu,
@@ -9,6 +9,13 @@ import {
   Coins,
   BotIcon as Robot,
   ArrowRight,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Smartphone,
+  Database,
+  Code,
 } from "lucide-react";
 import { useTypewriter } from "react-simple-typewriter";
 import { Button } from "@/components/ui/button";
@@ -16,9 +23,12 @@ import { Input } from "@/components/ui/input";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
+import { SocialIcon } from "@/components/social-icon";
+import { ServiceCard } from "@/components/service-card";
 
 export default function LandingPage() {
   const [email, setEmail] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const [text] = useTypewriter({
     words: [
@@ -29,10 +39,42 @@ export default function LandingPage() {
     loop: 0,
   });
 
+  
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+
   return (
     <div className="min-h-screen bg-black text-white bg-gradient-to-b from-black via-gray-900 to-black z-10">
-      <Header />
-      <main className="z-10">
+      <Header  toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-40 bg-gray-900 bg-opacity-95 md:hidden"
+          >
+            <div className="flex flex-col items-center justify-center h-full">
+              <nav className="text-center">
+                <ul className="space-y-6">
+                  <li><a href="#products" className="text-2xl hover:text-blue-400 transition" onClick={toggleMenu}>Products</a></li>
+                  <li><a href="#services" className="text-2xl hover:text-blue-400 transition" onClick={toggleMenu}>Services</a></li>
+                  <li><a href="#ecosystem" className="text-2xl hover:text-blue-400 transition" onClick={toggleMenu}>Ecosystem</a></li>
+                  <li><a href="#contact" className="text-2xl hover:text-blue-400 transition" onClick={toggleMenu}>Contact</a></li>
+                </ul>
+                <div className="flex justify-center space-x-6 mt-8">
+                  <SocialIcon Icon={Facebook} link="https://facebook.com" />
+                  <SocialIcon Icon={Twitter} link="https://twitter.com" />
+                  <SocialIcon Icon={Linkedin} link="https://linkedin.com" />
+                  <SocialIcon Icon={Instagram} link="https://instagram.com" />
+                </div>
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <main className="z-10 pt-16">
         <section className="container mx-auto px-4 py-20 text-center">
           <motion.h1
             className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 animate-pulse"
@@ -67,7 +109,7 @@ export default function LandingPage() {
           </motion.div>
         </section>
 
-        <section id="products" className="bg-gray-900 py-20">
+        <section id="products" className="py-20">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold mb-12 text-center">
               Our Revolutionary Products
@@ -87,6 +129,30 @@ export default function LandingPage() {
                 title="CodiHub"
                 description="A comprehensive cloud platform offering hosting, VMs, and more."
                 icon={<Cloud className="h-12 w-12 text-purple-500" />}
+              />
+            </div>
+          </div>
+        </section>
+
+
+        <section id="services" className="py-20">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold mb-12 text-center">Our Services</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <ServiceCard
+                title="Integrations"
+                description="Seamlessly connect your existing systems with our cutting-edge solutions."
+                icon={<Code className="h-12 w-12 text-yellow-500" />}
+              />
+              <ServiceCard 
+                title="App Development"
+                description="Custom mobile and web applications tailored to your specific needs."
+                icon={<Smartphone className="h-12 w-12 text-red-500" />}
+              />
+              <ServiceCard 
+                title="Data Management"
+                description="Efficient and secure handling of your valuable data assets."
+                icon={<Database className="h-12 w-12 text-green-500" />}
               />
             </div>
           </div>
@@ -126,7 +192,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="contact" className="bg-gray-900 py-20">
+        <section id="contact" className="py-20">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">Stay Updated</h2>
             <p className="text-xl mb-8 text-gray-300">
